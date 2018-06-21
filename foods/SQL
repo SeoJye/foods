@@ -1,0 +1,104 @@
+ID : food
+비밀번호 : 1234
+[테이블 생성]
+CREATE TABLE 음식점 (
+	음식점번호  CHAR(5)	NOT NULL ,
+	음식점이름  VARCHAR(20) NOT NULL,
+	전화번호    VARCHAR(15),
+	음식점 주소 VARCHAR(30),	
+	영업시간    VARCHAR(15),
+	소개       VARCHAR(60),
+	주문수     INT DEFAULT 0,
+	분류	   VARCHAR(10) DEFAULT 기타,
+	평점	   INT,
+	PRIMARY KEY(음식점번호) -
+);
+
+CREATE TABLE 메뉴 (
+	음식점번호  CHAR(5),
+	메뉴번호    CHAR(5) NOT NULL,
+	메뉴이름    VARCHAR(30) NOT NULL,
+	메뉴가격    INT NOT NULL,
+	PRIMARY KEY(메뉴번호),
+       FOREIGN KEY(음식점번호) REFERENCES 음식점(음식점번호)
+);
+
+CREATE TABLE 고객 (
+	고객아이디  VARCHAR(20)	NOT NULL,
+	고객비밀번호 VARCHAR(20) NOT NULL,
+	고객이름    VARCHAR(10),
+	전화번호    VARCHAR(15),
+	주소        VARCHAR(30) NOT NULL,
+	등급    VARCHAR(10)	NOT NULL,
+       적립금      INT	DEFAULT 0,
+	PRIMARY KEY(고객아이디),
+);
+
+CREATE TABLE 리뷰 (
+	리뷰번호    CHAR(5)	NOT NULL,
+	음식점번호 CHAR(5),
+	고객아이디    VARCHAR(20),
+	작성일    DATE,
+	내용      VARCHAR(100),
+	평점      INT,
+	PRIMARY KEY(리뷰번호),
+	FOREIGN KEY(고객아이디) REFERENCES 고객(고객아이디), 
+	FOREIGN KEY(음식점번호) REFERENCES 음식점(음식점번호)
+);
+
+CREATE TABLE 주문 (
+	주문번호    CHAR(5)   NOT NULL,
+	고객아이디  VARCHAR(20),
+	메뉴번호    CHAR(5),
+	주문수량    INT,
+	배달지     VARCHAR(30),
+	주문일     DATE,
+	주문시간   DATETIME,
+	PRIMARY KEY(주문번호),
+	FOREIGN KEY(고객아이디) REFERENCES 고객(고객아이디) 
+);
+
+CREATE TABLE 메뉴판 (
+	메뉴판번호    CHAR(5)   NOT NULL,
+	메뉴판이름  VARCHAR(20),
+	고객아이디 VARCHAR(20) NOT NULL,
+	PRIMARY KEY(메뉴판번호),
+	FOREIGN KEY(고객아이디) REFERENCES 고객(고객아이디)
+);
+
+CREATE TABLE 게시판 (
+	게시글번호    CHAR(5)   NOT NULL,
+	제목  VARCHAR(20),
+	내용    VARCHAR(100),
+	작성일  DATE,
+	메뉴판번호 CHAR(5),
+	고객아이디 VARCHAR(20),
+	PRIMARY KEY(게시글번호),
+	FOREIGN KEY(고객아이디) REFERENCES 고객(고객아이디),
+	FOREIGN KEY(메뉴판번호) REFERENCES 메뉴판(메뉴판번호)
+);
+
+CREATE TABLE 등록 (
+	메뉴판번호    CHAR(5) ,
+	메뉴번호  CHAR(5),
+	FOREIGN KEY(메뉴판번호) REFERENCES 메뉴판(메뉴판번호),
+	FOREIGN KEY(메뉴번호) REFERENCES 메뉴(메뉴번호)
+);
+
+
+CREATE TABLE 할인쿠폰 (
+	할인쿠폰번호	CHAR(5) NOT NULL,
+	할인가격	INT	DEFAULT 0,
+	할인율	INT	DEFAULT 0,
+	최소주문가격	INT	DEFAULT 0,
+	PRIMARY KEY(할인쿠폰번호)
+);
+
+CREATR TABLE 보유 (
+	고객아이디	VARCHAR(20),
+	할인쿠폰번호	CHAR(5)	NOT NULL,
+	FOREIGN KEY(고객아이디) REFERENCES 고객(고객아이디),
+	FOREIGN KEY(할인쿠폰번호) REFERENCES 할인쿠폰(할인쿠폰번호)
+);
+
+치킨 피자 패스트푸드 중국집 한식 분식 족발,보쌈
